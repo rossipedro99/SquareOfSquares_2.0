@@ -15,6 +15,21 @@ services:
       - db
     ports:
       - '8888:8888'
+    networks:
+      - network1
+      
+      
+  nginx:
+       build:
+            context: ./nginx
+       container_name: nginx
+       hostname: nginx
+       ports :
+            - "80:80"
+       depends_on:
+            - server
+       networks:
+            - network1
 
   db:
     image: 'mongo'
@@ -23,5 +38,10 @@ services:
       - '27017:27017'
     volumes:
       - ./data/db:/data/db
+    networks:
+            - network1
       
+networks:
+    network1:
+        external: false
       

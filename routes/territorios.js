@@ -18,31 +18,31 @@ router.get('/territories', async (req, res) => {
 });
 
 router.get('/territories/:id', async (req, res) => {
-  if(req.query.withpainted == 'true') {
-   await Territorio.findOne({ _id: req.params.id })
-    .then(territorios => {
-      if (territorios == null) {
-        res.status(400).send({ error: 'this territory was not found.' })
-      } else {
-        res.status(200).send({
-          data: territorios
-        })
-      }
-    })
-    .catch(error => res.status(500).json(error));
+  if (req.query.withpainted == 'true') {
+    await Territorio.findOne({ _id: req.params.id })
+      .then(territorios => {
+        if (territorios == null) {
+          res.status(400).send({ error: 'this territory was not found.' })
+        } else {
+          res.status(200).send({
+            data: territorios
+          })
+        }
+      })
+      .catch(error => res.status(500).json(error));
   } else {
     await Territorio.findOne({ _id: req.params.id })
-    .then(territorios => {
-      if (territorios == null) {
-        res.status(400).send({ error: 'this territory was not found.' })
-      } else {
-        const jsonRes = territorios.toJSON();
-        delete jsonRes.painted_squares;
-        res.status(200).send({
-          data: jsonRes
-        })
-      }
-    })
+      .then(territorios => {
+        if (territorios == null) {
+          res.status(400).send({ error: 'this territory was not found.' })
+        } else {
+          const jsonRes = territorios.toJSON();
+          delete jsonRes.painted_squares;
+          res.status(200).send({
+            data: jsonRes
+          })
+        }
+      })
   }
 });
 
