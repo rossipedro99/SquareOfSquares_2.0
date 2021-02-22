@@ -14,7 +14,7 @@ app.use('/api/', squares);
 
 
 mongoose
-  .connect('mongodb://db:27017/uva', {
+  .connect('mongodb://db:27017/nodejs_vitta', {
     useNewUrlParser: true
   })
   .then(result => {
