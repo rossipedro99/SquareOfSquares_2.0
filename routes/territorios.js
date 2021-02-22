@@ -6,8 +6,8 @@ const Territorio = require('../models/Territorios');
 const Quadrado = require('../models/Quadrado');
 
 
-router.get('/territories', (req, res) => {
-  Territorio.find()
+router.get('/territories', async (req, res) => {
+  await Territorio.find()
     .then(territorios => {
       res.status(200).send({
         count: territorios.length,
@@ -18,7 +18,8 @@ router.get('/territories', (req, res) => {
 });
 
 router.get('/territories/:id', async (req, res) => {
-  await Territorio.findOne({ _id: req.params.id })
+  if(req.query.withpainted == 'true') {
+   await Territorio.findOne({ _id: req.params.id })
     .then(territorios => {
       if (territorios == null) {
         res.status(400).send({ error: 'this territory was not found.' })
@@ -29,22 +30,20 @@ router.get('/territories/:id', async (req, res) => {
       }
     })
     .catch(error => res.status(500).json(error));
-});
-
-router.get('/territoriess/:id', (req, res) => {
-  Territorio.findById({ _id: req.params.id })
-    .populate('painted_squares')
-    .exec()
+  } else {
+    await Territorio.findOne({ _id: req.params.id })
     .then(territorios => {
       if (territorios == null) {
         res.status(400).send({ error: 'this territory was not found.' })
       } else {
+        const jsonRes = territorios.toJSON();
+        delete jsonRes.painted_squares;
         res.status(200).send({
-          data: territorios
+          data: jsonRes
         })
       }
     })
-    .catch(error => res.status(500).json(error));
+  }
 });
 
 
@@ -87,8 +86,8 @@ router.post('/territories', async (req, res, next) => {
 
 });
 
-router.delete('/territories/:id', (req, res) => {
-  Territorio.findOneAndDelete({ _id: req.params.id })
+router.delete('/territories/:id', async (req, res) => {
+  await Territorio.findOneAndDelete({ _id: req.params.id })
     .then(territorios => {
       if (territorios == null) {
         res.status(400).send({ error: 'this territory was not found.' })
