@@ -45,7 +45,7 @@ router.post('/squares', (req, res) => {
   })
 });
 
-/* Para associar o quadrado pintado com o território, colocar o _id com o id do território no body */
+/* Para associar o quadrado pintado com o território, colocar o _id com o id do território no body. */
 
 
 router.patch('/squares/:x/:y/paint', async (req, res) => {
