@@ -7,6 +7,22 @@ const Territorio = require('../models/Territorios');
 
 
 
+router.get('/squares/:x/:y', async (req, res) => {
+  await Quadrado.findOne({ x: req.params.x, y: req.params.y })
+    .then(quadrados => {
+      if (quadrados == null) {
+        res.status(400).send({ error: 'this square does not belong to any territory' })
+      } else {
+        res.status(200).send({
+          data: quadrados,
+          error: false
+        })
+      }
+    })
+    .catch(error => res.status(500).json(error));
+});
+
+
 router.post('/squares', (req, res) => {
   const novoQuadrado = new Quadrado({
     x: req.body.x,
@@ -29,20 +45,7 @@ router.post('/squares', (req, res) => {
   })
 });
 
-router.get('/squares/:x/:y', (req, res) => {
-  Quadrado.findOne({ x: req.params.x, y: req.params.y })
-    .then(quadrados => {
-      if (quadrados == null) {
-        res.status(400).send({ error: 'this square does not belong to any territory' })
-      } else {
-        res.status(200).send({
-          data: quadrados,
-          error: false
-        })
-      }
-    })
-    .catch(error => res.status(500).json(error));
-});
+/* Para associar o quadrado pintado com o território, colocar o _id com o id do território no body */
 
 
 router.patch('/squares/:x/:y/paint', async (req, res) => {
